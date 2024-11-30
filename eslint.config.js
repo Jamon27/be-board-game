@@ -20,10 +20,12 @@ export default [
     rules: {
       ...typescriptEslintPlugin.configs.recommended.rules, // Include TypeScript rules
       'prettier/prettier': 'error', // Use Prettier plugin for code style
-      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_' },
+      ],
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
     },
   },
 ];
-
