@@ -7,9 +7,9 @@
     "start": "node dist/index.js",
     "dev": "node --loader ts-node/esm --experimental-specifier-resolution=node src/index.ts",
     "build": "tsc",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "format": "prettier --write ."
+    "lint": "eslint ./src",
+    "lint:fix": "eslint ./src --fix",
+    "format": "prettier --write ./src"
   },
   "keywords": [],
   "author": "",
