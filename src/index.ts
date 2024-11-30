@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
-import chessRoutes from './routes/chess';
+import chessRoutes from './routes/chess.route';
+import errorMiddleware from './middlewares/error.middleware';
 
 const app = express();
 const PORT = 3000;
@@ -12,7 +13,8 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Hello, TypeScript with Express!');
 });
 
-app.use('/api', chessRoutes);
+app.use('/api/chess', chessRoutes);
+app.use(errorMiddleware);
 
 // Start server
 app.listen(PORT, () => {
