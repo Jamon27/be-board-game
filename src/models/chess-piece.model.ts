@@ -1,4 +1,4 @@
-import { BoardPiece } from './board-piece';
+import { BoardPiece } from './board-piece.model';
 
 type Position = [file: number, rank: number];
 

@@ -1,4 +1,4 @@
-import { ChessPiece } from './chess-piece';
+import { ChessPiece } from './chess-piece.model';
 
 export class Knight extends ChessPiece {
   private static moveOffsets = [
