@@ -6,7 +6,7 @@ export interface IChessboardMapper {
 
 export class StandardChessboardMapper implements IChessboardMapper {
   parsePosition(position: string): [number, number] | null {
-    const file = position.charCodeAt(0) - 'a'.charCodeAt(0);
+    const file = position.toLowerCase().charCodeAt(0) - 'a'.charCodeAt(0);
     const rank = parseInt(position[1], 10) - 1;
 
     if (!this.isValidPosition(file, rank)) {
