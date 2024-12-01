@@ -62,7 +62,6 @@ export class ChessService {
           // Found another shortest path
           shortestPaths.push(pathInNotation);
         }
-        // Continue to find all possible paths
       }
 
       // Continue exploring possible moves
