@@ -48,7 +48,7 @@ function validateChessInput(
     return;
   }
 
-  if (stepsLimit < 1 || stepsLimit > 5) {
+  if (stepsLimit < 0 || stepsLimit > 8) {
     res.status(400).json({
       message: 'Invalid input format. Expected stepsLimit to be from 1 to 5',
     });
