@@ -20,7 +20,7 @@ export abstract class ChessPiece extends BoardPiece {
   protected abstract getMoveOffsets(): number[][];
 
   public getPossibleMoves(): string[] {
-    const [file, rank] = this.position;
+    const [file, rank] = this.position; // x, y
 
     return this.getMoveOffsets()
       .map(([dx, dy]) => {
@@ -29,9 +29,9 @@ export abstract class ChessPiece extends BoardPiece {
 
         // Ensure the move is within the board boundaries
         if (this.chessboardMapper.isValidPosition(newFile, newRank)) {
-          //to DO fix
-          return (
-            String.fromCharCode('a'.charCodeAt(0) + newFile) + (newRank + 1)
+          return this.chessboardMapper.mapPositionToChessNotation(
+            newFile,
+            newRank,
           );
         }
         return null;
