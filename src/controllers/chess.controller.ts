@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { ChessService } from '../services/chess.service';
-import { Knight } from '../models/knight.model';
 import { StandardChessboardMapper } from '../utils/chessboard-mapper.utils';
+import { ChessPieceFactory } from '../utils/chess-piece-factory';
 
 interface IChessRequestBody {
   startPosition: string;
@@ -14,6 +14,7 @@ export interface IChessRequest extends Request {
   body: IChessRequestBody;
 }
 
+// ToDo: DI for service?
 class ChessController {
   static async calculatePaths(
     req: IChessRequest,
@@ -23,9 +24,14 @@ class ChessController {
 
     try {
       const chessboardMapper = new StandardChessboardMapper();
-      const knight = new Knight('black', startPosition, chessboardMapper);
+      const chessPiece = ChessPieceFactory.create(
+        chessPieceType,
+        'black',
+        startPosition,
+        chessboardMapper,
+      );
 
-      const service = new ChessService(knight, chessboardMapper);
+      const service = new ChessService(chessPiece, chessboardMapper);
 
       const { shortestPaths, allPaths } = await service.calculatePath(
         endPosition,
