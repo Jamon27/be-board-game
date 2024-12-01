@@ -33,7 +33,7 @@ class ChessController {
 
       const service = new ChessService(chessPiece, chessboardMapper);
 
-      const { shortestPaths, allPaths } = await service.calculatePath(
+      const { shortestPaths, allPaths } = service.calculatePath(
         endPosition,
         stepsLimit,
       );
