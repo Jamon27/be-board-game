@@ -1,6 +1,6 @@
 export interface IChessboardMapper {
   parsePosition(position: string): [number, number] | null;
-  formatPosition(file: number, rank: number): string;
+  mapPositionToChessNotation(file: number, rank: number): string;
   isValidPosition(file: number, rank: number): boolean;
 }
 
@@ -11,15 +11,12 @@ export class StandardChessboardMapper implements IChessboardMapper {
 
     if (!this.isValidPosition(file, rank)) {
       return null;
-      throw new Error(
-        `Invalid position "${position}". Must be in a1-h8 format.`,
-      );
     }
 
     return [file, rank];
   }
 
-  formatPosition(file: number, rank: number): string {
+  mapPositionToChessNotation(file: number, rank: number): string {
     return String.fromCharCode('a'.charCodeAt(0) + file) + (rank + 1);
   }
 
