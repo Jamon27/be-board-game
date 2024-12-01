@@ -1,4 +1,4 @@
-import { Queue } from './queue';
+import { Queue } from '../utils/queue.utils';
 
 describe('Queue', () => {
   let queue: Queue<number>;
