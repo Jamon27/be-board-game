@@ -1,15 +1,28 @@
 import { Request, Response } from 'express';
-import ChessService from '../services/chess.service';
+import { ChessService } from '../services/chess.service';
+import { Knight } from '../models/knight.model';
+import { StandardChessboardMapper } from '../utils/chessboard-mapper.utils';
 
 class ChessController {
   static async calculatePaths(req: Request, res: Response): Promise<void> {
-    const { start, end } = req.body;
-    const paths = await ChessService.calculatePaths();
+    const { startPosition, endPosition, chessPieceType, stepsLimit } = req.body;
 
-    if (paths.length === 0) {
-      res.status(404).json({ message: 'No solution found' });
-    } else {
-      res.status(200).json({ shortestPath: paths[0], allPaths: paths });
+    try {
+      const chessboardMapper = new StandardChessboardMapper();
+      const knight = new Knight('black', startPosition, chessboardMapper);
+
+      console.log(knight.getPossibleMoves());
+      const service = new ChessService(knight, chessboardMapper);
+
+      const { shortestPaths, allPaths } = await service.calculatePath(
+        endPosition,
+        stepsLimit,
+      );
+
+      res.status(200).json({ shortestPaths, allPaths });
+    } catch (e: any) {
+      console.log(e);
+      res.status(500).json(e.toString());
     }
   }
 }
