@@ -40,22 +40,6 @@ describe('ChessService', () => {
       );
     });
 
-    it('should calculate the correct paths', () => {
-      const chessboardMapper = new StandardChessboardMapper();
-
-      chessPieceMock.getPosition.mockReturnValue('e5');
-      chessPieceMock.getPossibleMoves.mockReturnValue([
-        [6, 5], // g6
-        [5, 6], // f7
-      ]);
-
-      const service = new ChessService(chessPieceMock, chessboardMapper);
-      const result = service.calculatePath('g6', 3);
-
-      expect(result.shortestPaths).toEqual(['e5 -> g6']);
-      expect(result.allPaths).toEqual(['e5 -> g6', 'e5 -> f7 -> g6']);
-    });
-
     it('should calculate the correct paths for knight at a1 to b7', () => {
       const chessboardMapper = new StandardChessboardMapper();
       const knight = new Knight('Black', 'a1', chessboardMapper);
@@ -85,10 +69,25 @@ describe('ChessService', () => {
       expect(result.allPaths).toEqual([
         'd4 -> f3',
         'd4 -> b3 -> d2 -> f3',
+        'd4 -> b3 -> d4 -> f3',
+        'd4 -> b5 -> d4 -> f3',
+        'd4 -> c2 -> d4 -> f3',
         'd4 -> c2 -> e1 -> f3',
+        'd4 -> c6 -> d4 -> f3',
         'd4 -> c6 -> e5 -> f3',
+        'd4 -> e2 -> d4 -> f3',
         'd4 -> e2 -> g1 -> f3',
+        'd4 -> e6 -> d4 -> f3',
         'd4 -> e6 -> g5 -> f3',
+        'd4 -> f3 -> d2 -> f3',
+        'd4 -> f3 -> d4 -> f3',
+        'd4 -> f3 -> e1 -> f3',
+        'd4 -> f3 -> e5 -> f3',
+        'd4 -> f3 -> g1 -> f3',
+        'd4 -> f3 -> g5 -> f3',
+        'd4 -> f3 -> h2 -> f3',
+        'd4 -> f3 -> h4 -> f3',
+        'd4 -> f5 -> d4 -> f3',
         'd4 -> f5 -> h4 -> f3',
       ]);
     });

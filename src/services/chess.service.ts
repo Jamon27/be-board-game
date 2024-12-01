@@ -26,59 +26,62 @@ export class ChessService {
       this.chessPiece.getPosition(),
     )!;
 
-    const queue: Array<[[number, number], [number, number][]]> = [[start, []]];
+    const queue: Array<[[number, number], [number, number][]]> = [
+      [start, [start]],
+    ];
     const allPaths: string[][] = [];
     let shortestPaths: string[][] = [];
+    let minPathLength = Infinity;
 
     while (queue.length > 0) {
+      console.log(queue?.length);
       const [currentPosition, path] = queue.shift()!;
+      const pathLength = path.length - 1; // Number of moves made
 
-      const newPath = [...path, currentPosition];
+      // If path exceeds steps limit, skip
+      if (pathLength > stepsLimit) continue;
 
-      // If target reached within limit
+      // If target reached within steps limit
       if (
-        currentPosition[0] === end[0] &&
-        currentPosition[1] === end[1] &&
-        newPath.length <= stepsLimit + 1
+        this.isTheSamePosition(currentPosition, end) &&
+        pathLength <= stepsLimit
       ) {
-        const pathInNotation = newPath.map(([file, rank]) =>
+        const pathInNotation = path.map(([file, rank]) =>
           this.chessboardMapper.mapPositionToChessNotation(file, rank),
         );
         allPaths.push(pathInNotation);
 
-        if (
-          !shortestPaths.length ||
-          pathInNotation.length <= shortestPaths[0].length // works fine because we using breadth traverse
-        ) {
+        if (pathLength < minPathLength) {
+          // Found a shorter path
+          minPathLength = pathLength;
+          shortestPaths = [pathInNotation];
+        } else if (pathLength === minPathLength) {
+          // Found another shortest path
           shortestPaths.push(pathInNotation);
         }
-        continue;
+        // Continue to find all possible paths
       }
 
-      // Stop exploring paths beyond the limit
-      if (newPath.length > stepsLimit + 1) {
-        continue;
+      // Continue exploring possible moves
+      if (pathLength < stepsLimit) {
+        this.chessPiece.setPosition(currentPosition);
+        const possibleMoves = this.chessPiece.getPossibleMoves();
+        possibleMoves.forEach((move) => {
+          queue.push([move, [...path, move]]);
+        });
       }
-
-      // Temporarily set the chess piece to the current position
-      this.chessPiece.setPosition([currentPosition[0], currentPosition[1]]);
-
-      // Explore all possible moves from the current position
-      const possibleMoves = this.chessPiece.getPossibleMoves();
-      possibleMoves.forEach(([nextFile, nextRank]) => {
-        if (
-          !newPath.some(
-            ([file, rank]) => file === nextFile && rank === nextRank,
-          )
-        ) {
-          queue.push([[nextFile, nextRank], newPath]);
-        }
-      });
     }
 
     return {
       shortestPaths: shortestPaths.map((path) => path.join(' -> ')),
       allPaths: allPaths.map((path) => path.join(' -> ')),
     };
+  }
+
+  private isTheSamePosition(
+    pos1: [number, number],
+    pos2: [number, number],
+  ): boolean {
+    return pos1[0] === pos2[0] && pos1[1] === pos2[1];
   }
 }
