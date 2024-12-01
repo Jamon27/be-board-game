@@ -1,19 +1,24 @@
+import { IChessboardMapper } from '../utils/chessboard-mapper.utils';
 import { BoardPiece } from './board-piece.model';
 
 type Position = [file: number, rank: number];
 
 export abstract class ChessPiece extends BoardPiece {
   private position!: Position;
+  private chessboardMapper: IChessboardMapper;
 
-  constructor(color: string, position: string) {
+  constructor(
+    color: string,
+    position: string,
+    chessboardMapper: IChessboardMapper,
+  ) {
     super(color);
+    this.chessboardMapper = chessboardMapper;
     this.setPosition(position);
   }
 
-  // Static getter for moveOffsets
   protected abstract getMoveOffsets(): number[][];
 
-  // Calculate possible moves using moveOffsets
   public getPossibleMoves(): string[] {
     const [file, rank] = this.position;
 
@@ -23,7 +28,8 @@ export abstract class ChessPiece extends BoardPiece {
         const newRank = rank + dy;
 
         // Ensure the move is within the board boundaries
-        if (this.isValidPosition([newFile, newRank])) {
+        if (this.chessboardMapper.isValidPosition(newFile, newRank)) {
+          //to DO fix
           return (
             String.fromCharCode('a'.charCodeAt(0) + newFile) + (newRank + 1)
           );
@@ -36,31 +42,17 @@ export abstract class ChessPiece extends BoardPiece {
   // Internal representation to chess notation
   public getPosition(): string {
     const [file, rank] = this.position;
-    return String.fromCharCode('a'.charCodeAt(0) + file) + (rank + 1);
+    return this.chessboardMapper.mapPositionToChessNotation(file, rank);
   }
 
   public setPosition(newPosition: string): void {
-    this.position = this.parsePosition(newPosition);
-  }
-
-  private parsePosition(position: string): Position {
-    const file = position.toLowerCase().charCodeAt(0) - 'a'.charCodeAt(0);
-    const rank = parseInt(position[1], 10) - 1;
-
-    if (!this.isValidPosition([file, rank])) {
+    const parsedPosition = this.chessboardMapper.parsePosition(newPosition);
+    if (parsedPosition === null) {
       throw new Error(
-        `Invalid position "${position}". Must be in a1-h8 format.`,
+        `Invalid end position "${parsedPosition}". Must be in a1-h8 format.`,
       );
     }
 
-    return [file, rank];
+    this.position = parsedPosition;
   }
-
-  private isValidPosition([file, rank]: Position): boolean {
-    return file >= 0 && file < 8 && rank >= 0 && rank < 8;
-  }
-
-  // public getNumericPosition(): number[] {
-  //   return this.position;
-  // }
 }
