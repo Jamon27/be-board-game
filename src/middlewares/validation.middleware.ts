@@ -1,16 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
-
-interface IChessRequestBody {
-  startPosition: string;
-  endPosition: string;
-  chessPieceType: string;
-  stepsLimit: number;
-}
-
-// Extend Express's Request interface
-interface IChessRequest extends Request {
-  body: IChessRequestBody;
-}
+import { Response, NextFunction } from 'express';
+import { IChessRequest } from '../controllers/chess.controller';
 
 function validateChessInput(
   req: IChessRequest,
