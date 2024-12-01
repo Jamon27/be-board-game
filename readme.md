@@ -4,6 +4,12 @@
 
 This project is a backend service for a chess application. It is built with **Express.js** and **TypeScript** to ensure robust and scalable code, and it uses **Jest** for unit testing. The app is running on port :3100
 
+The solution is built based on the possibility to return back to the initial position.
+So from c4 to d6 we within 3 steps using the following logic:
+c4 -> a5 -> c4 -> d6
+
+Of course, it's not the shortest solution. But I believe it's can be a valid solution.
+
 ---
 
 ## Features
