@@ -1,5 +1,6 @@
 import { ChessPiece } from '../models/chess-piece.model';
 import { IChessboardMapper } from '../utils/chessboard-mapper.utils';
+import { Queue } from '../utils/queue.utils';
 
 interface ICalculatedPaths {
   shortestPaths: string[];
@@ -26,16 +27,18 @@ export class ChessService {
       this.chessPiece.getPosition(),
     )!;
 
-    const queue: Array<[[number, number], [number, number][]]> = [
-      [start, [start]],
-    ];
+    const queue = new Queue<[[number, number], [number, number][]]>(); // Saving a lot of time
+    queue.enqueue([start, [start]]);
+
     const allPaths: string[][] = [];
     let shortestPaths: string[][] = [];
     let minPathLength = Infinity;
 
-    while (queue.length > 0) {
-      console.log(queue?.length);
-      const [currentPosition, path] = queue.shift()!;
+    while (!queue.isEmpty()) {
+      const dequeued = queue.dequeue();
+      if (!dequeued) continue;
+
+      const [currentPosition, path] = dequeued;
       const pathLength = path.length - 1; // Number of moves made
 
       // If path exceeds steps limit, skip
@@ -67,7 +70,7 @@ export class ChessService {
         this.chessPiece.setPosition(currentPosition);
         const possibleMoves = this.chessPiece.getPossibleMoves();
         possibleMoves.forEach((move) => {
-          queue.push([move, [...path, move]]);
+          queue.enqueue([move, [...path, move]]);
         });
       }
     }
