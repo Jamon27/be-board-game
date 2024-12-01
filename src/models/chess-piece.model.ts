@@ -19,7 +19,7 @@ export abstract class ChessPiece extends BoardPiece {
 
   protected abstract getMoveOffsets(): number[][];
 
-  public getPossibleMoves(): string[] {
+  public getPossibleMoves(): Position[] {
     const [file, rank] = this.position; // x, y
 
     return this.getMoveOffsets()
@@ -29,14 +29,11 @@ export abstract class ChessPiece extends BoardPiece {
 
         // Ensure the move is within the board boundaries
         if (this.chessboardMapper.isValidPosition(newFile, newRank)) {
-          return this.chessboardMapper.mapPositionToChessNotation(
-            newFile,
-            newRank,
-          );
+          return [newFile, newRank];
         }
         return null;
       })
-      .filter(Boolean) as string[];
+      .filter(Boolean) as Position[];
   }
 
   // Internal representation to chess notation
@@ -45,14 +42,18 @@ export abstract class ChessPiece extends BoardPiece {
     return this.chessboardMapper.mapPositionToChessNotation(file, rank);
   }
 
-  public setPosition(newPosition: string): void {
-    const parsedPosition = this.chessboardMapper.parsePosition(newPosition);
-    if (parsedPosition === null) {
-      throw new Error(
-        `Invalid position "${newPosition}". Must be in a1-h8 or A1-H8 format.`,
-      );
-    }
+  public setPosition(newPosition: string | Position): void {
+    if (typeof newPosition === 'string') {
+      const parsedPosition = this.chessboardMapper.parsePosition(newPosition);
+      if (parsedPosition === null) {
+        throw new Error(
+          `Invalid position "${newPosition}". Must be in a1-h8 or A1-H8 format.`,
+        );
+      }
 
-    this.position = parsedPosition;
+      this.position = parsedPosition;
+    } else {
+      this.position = newPosition as Position;
+    }
   }
 }
