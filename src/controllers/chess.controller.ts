@@ -39,10 +39,10 @@ class ChessController {
       );
 
       res.status(200).json({ shortestPaths, allPaths });
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error(e);
 
-      res.status(500).json(e.toString());
+      res.status(500).json((e as Error).toString());
     }
   }
 }
