@@ -49,7 +49,7 @@ export abstract class ChessPiece extends BoardPiece {
     const parsedPosition = this.chessboardMapper.parsePosition(newPosition);
     if (parsedPosition === null) {
       throw new Error(
-        `Invalid end position "${parsedPosition}". Must be in a1-h8 format.`,
+        `Invalid position "${newPosition}". Must be in a1-h8 or A1-H8 format.`,
       );
     }
 
