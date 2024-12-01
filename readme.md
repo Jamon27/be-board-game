@@ -26,19 +26,7 @@ Ensure you have the following installed on your system:
 
 ## Installation
 
-1. Clone the repository:
-
-   ```bash
-   git clone <repository-url>
-   ```
-
-2. Navigate to the project directory:
-
-   ```bash
-   cd be-board-game
-   ```
-
-3. Install dependencies:
+1. Install dependencies:
 
    ```bash
    npm install
