@@ -34,7 +34,8 @@ class ChessController {
 
       res.status(200).json({ shortestPaths, allPaths });
     } catch (e: any) {
-      console.log(e);
+      console.error(e);
+
       res.status(500).json(e.toString());
     }
   }
